@@ -8,7 +8,7 @@ namespace VShop.Web.Services;
 public class ProductService : IProductService
 {
     private readonly IHttpClientFactory _clientFactory;
-    private const string apiEndpoint = "api/v1/products";
+    private const string apiEndpoint = "/api/Products/";
     private readonly JsonSerializerOptions _options;
     private ProductViewModel productVM;
     private IEnumerable<ProductViewModel> productsVM;
@@ -28,8 +28,8 @@ public class ProductService : IProductService
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStreamAsync();
-                productsVM = JsonSerializer
-                    .Deserialize<IEnumerable<ProductViewModel>>(apiResponse, _options);
+                productsVM = await JsonSerializer
+                    .DeserializeAsync<IEnumerable<ProductViewModel>>(apiResponse, _options);
             }
             else
             {
