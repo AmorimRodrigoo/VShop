@@ -53,4 +53,56 @@ public class ProductController : Controller
       }
       return View(productVM);
    }
+
+   [HttpGet]
+   public async Task<IActionResult> UpdateProduct(int id)
+   {
+      ViewBag.CategoryId = new SelectList(await _categoryService.GetAllCategories(), "CategoryId", "Name");
+
+      var result = await _productService.GetProductById(id);
+
+      if (result is null)
+      {
+         return View("Error");
+      }
+      return View(result);
+   }
+
+   [HttpPost]
+   public async Task<IActionResult> UpdateProduct(ProductViewModel productVM)
+   {
+      if (ModelState.IsValid)
+      {
+         var result = await _productService.UpdateProduct(productVM);
+         
+         if(result is  not null)
+            return RedirectToAction(nameof(Index));
+      }
+      return View(productVM);
+   }
+
+   [HttpGet]
+   public async Task<IActionResult> DeleteProduct(int id)
+   {
+      var result = await _productService.GetProductById(id);
+      
+      if (result is null)
+      {
+         return View("Error");
+      }
+      return View(result);
+   }
+
+   [HttpPost, ActionName("DeleteProduct")]
+   public async Task<IActionResult> DeleteConfirmed(int id)
+   {
+      var result = await _productService.DeleteProduct(id);
+
+      if (!result)
+      {
+         return View("Error");
+      }
+
+      return RedirectToAction("Index");
+   }
 }

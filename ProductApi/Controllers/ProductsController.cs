@@ -50,14 +50,9 @@ public class ProductsController : ControllerBase
             new { id = productDto.Id }, productDto);
     }
 
-    [HttpPut("{id:int}")]
-    public async Task<ActionResult> Update(int id, [FromBody] ProductDto productDto)
+    [HttpPut()]
+    public async Task<ActionResult> Update ([FromBody] ProductDto productDto)
     {
-        if (id != productDto.Id)
-        {
-            return BadRequest("Product ID mismatch");
-        }
-
         if (productDto == null)
         {
             return BadRequest("Product data is null");
